@@ -1,7 +1,9 @@
 ---
+id: 3
 title: "Song 3"
 date: "2017-08-21"
 track: "distancia"
+image: "rose"
 ---
 
 General Information, this is song 2
