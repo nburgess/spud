@@ -1,6 +1,7 @@
 ---
 title: "Song 1"
 date: "2017-08-21"
+track: "beat"
 ---
 
 General Information, this is song 1

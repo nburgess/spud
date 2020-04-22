@@ -4,7 +4,18 @@ import SEO from "../components/seo"
 import github from "../images/github.svg"
 import { graphql } from "gatsby"
 
-import jam from "../sounds/beat.mp3"
+import beat from "../sounds/beat.mp3"
+import purplecat from "../sounds/purplecat.mp3"
+import distancia from "../sounds/distancia.mp3"
+
+
+function getTime(time) {
+  if (!isNaN(time)) {
+    return (
+      Math.floor(time / 60) + ":" + ("0" + Math.floor(time % 60)).slice(-2)
+    );
+  }
+}
 
 const logos = [
   {
@@ -77,12 +88,16 @@ export default class extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (this.state.selectedTrack !== prevState.selectedTrack) {
       let track;
+      console.log(this.state.selectedTrack)
       switch (this.state.selectedTrack) {
-        case "Campfire Story":
-          track = campfireStory;
+        case "beat":
+          track = beat;
           break;
-        case "Booting Up":
-          track = bootingUp;
+        case "purplecat":
+          track = purplecat;
+          break;
+        case "distancia":
+          track = distancia;
           break;
         default:
           break;
@@ -108,13 +123,15 @@ export default class extends Component {
       }
     }
   }
-  playAudio() {
-    const audioEl = document.getElementsByClassName("audio-element")[0]
-    this.player.src = jam
-    this.player.play()
-  }
+  // playAudio() {
+  //   const audioEl = document.getElementsByClassName("audio-element")[0]
+  //   this.player.src = jam
+  //   this.player.play()
+  // }
   render(){
-    console.log(this.props.data.markdownRemark)
+    const currentTime = getTime(this.state.currentTime);
+    const duration = getTime(this.state.duration);
+
     return(
       <div>
         <div className="h-screen bg-no-repeat bg-position-center bg-fixed flex" style={{backgroundImage: "url("+ require("../images/bg.jpg") +")"}}>
@@ -129,14 +146,14 @@ export default class extends Component {
               <div className="w-1/3 px-2 mb-4">
                 <div className="opacity-25 rounded-3g shadow-2xl hover:shadow-inner hover:opacity-50">
                   {/* <p>{node.frontmatter.title}</p> */}
-                  <img className="object-cover" src={require("../images/rose.jpg")} onClick={this.playAudio}></img>
+                  <img className="object-cover" src={require("../images/rose.jpg")} onClick={() => this.setState({selectedTrack: node.frontmatter.track})}></img>
                   {/* <div dangerouslySetInnerHTML={{__html: node.html}}></div> */}
                 </div>
               </div>
             ))}
             <div className="w-1/3 px-2 mb-4"><div className="opacity-25 rounded-3g shadow-2xl">
               <img className="object-cover" src={require("../images/rose.jpg")} onClick={this.playAudio}></img>
-              <audio ref={ref => this.player = ref} />
+              
               {/* <audio className="audio-element">
                 <source src="google" type="audio/mp3"></source>
                 <source src="https://api.coderrocketfuel.com/assets/pomodoro-times-up.mp3"></source>
@@ -144,6 +161,7 @@ export default class extends Component {
             </div></div>
           </div>
         </div>
+        <audio ref={ref => this.player = ref} />
       </div>
 
         /* <div className="p-6">
@@ -206,10 +224,10 @@ export const query = graphql`
     allMarkdownRemark {
       edges {
         node {
-          html
           frontmatter {
             date
             title
+            track
           }
         }
       }
