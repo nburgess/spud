@@ -9,6 +9,8 @@ import distancia from "../sounds/distancia.mp3"
 import crane from "../images/crane.webp"
 import rose from "../images/rose.jpg"
 
+import Song from "./song"
+
 function getTime(time) {
   if (!isNaN(time)) {
     return (
@@ -31,6 +33,7 @@ const images = {
 const BackgroundImage = tw.div`
   h-screen bg-no-repeat bg-position-center bg-fixed flex
 `
+
 export default class extends Component {
   state = {
     selectedTrack: null,
@@ -49,6 +52,9 @@ export default class extends Component {
   componentWillUnmount() {
     this.player.removeEventListener("timeupdate", () => {})
   }
+
+
+
   componentDidUpdate(prevProps, prevState) {
     if (this.state.selectedTrack !== prevState.selectedTrack) {
       let track;
@@ -99,23 +105,15 @@ export default class extends Component {
             ))}
           </div>
         </div>
+        <BackgroundImage style={{backgroundImage: "url("+ require("../images/bg.jpg") +")"}}>
+              <Song className="w-1"/>
+        </BackgroundImage>
         <audio ref={ref => this.player = ref} />
       </div>
-
-        /* 
-        <div className="bg-white rounded-t-lg overflow-hidden border-t border-l border-r border-gray-400 p-4 ">
-          <div className="relative h-32 text-center">
-            <div className="z-40 absolute w-24 h-24 ml-0 mt-0 bg-gray-400 flex justify-center items-center" style={{backgroundImage: "url("+ require("../images/bg.jpg") +")"}}>z-40</div>
-            <div className="z-30 absolute w-24 h-24 ml-2 mt-2 bg-gray-500 flex justify-center items-center">z-30</div>
-            <div className="z-20 absolute w-24 h-24 ml-4 mt-4 bg-gray-600 flex justify-center items-center">z-20</div>
-            <div className="z-10 absolute w-24 h-24 ml-6 mt-6 bg-gray-700 flex justify-center items-center">z-10</div>
-            <div className="z-0 absolute w-24 h-24 ml-8 mt-8 bg-gray-800 flex justify-center items-center">z-0</div>
-          </div>
-        </div>
-      </div> */
     )
   }
 }
+
 export const query = graphql`
   query{
     allMarkdownRemark(sort: {order: DESC, fields: [frontmatter___id]}) {
